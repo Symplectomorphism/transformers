@@ -62,3 +62,32 @@ class FeedForwardBlock(nn.Module):
     def forward(self, x):
         # (batch_size, seq_len, d_model) -> (batch_size, seq_len, d_ff) -> (batch_size, seq_len, d_model)
         return self.linear2(self.dropout(torch.relu(self.linear1(x))))
+
+
+class MultiHeadAttentionBlock(nn.Module):
+
+    def __init__(self, d_model: int, h: int, dropout: float) -> None:
+        super().__init__()
+        self.d_model = d_model  
+        self.h = h
+        assert d_model & h == 0, "d_model is not divisible by h"
+
+        self.d_k = d_model // h
+        self.w_q = nn.Linear(d_model, self.d_k * h)
+        self.w_k = nn.Linear(d_model, self.d_k * h)
+        self.w_v = nn.Linear(d_model, self.d_k * h)
+
+        self.w_o = nn.Linear(d_model, d_model) # Wo
+        self.dropout = nn.Dropout(dropout)
+
+    def forward(self, q, k, v, mask):
+        query = self.w_q(q) # (batch_size, seq_len, d_k * h) -> (batch_size, seq_len, d_k * h)
+        key = self.w_k(k)   # (batch_size, seq_len, d_k * h) -> (batch_size, seq_len, d_k * h)
+        value = self.w_v(v) # (batch_size, seq_len, d_k * h) -> (batch_size, seq_len, d_k * h)
+ 
+        # (batch_size, seq_len, d_k * h) -> (batch_size, seq_len, h, d_k) -> (batch_size, h, seq_len, d_k)
+        query = query.view(-1, query.size(1), self.h, self.d_k).transpose(1, 2) 
+        # (batch_size, seq_len, d_k * h) -> (batch_size, seq_len, h, d_k) -> (batch_size, h, seq_len, d_k)
+        key = key.view(-1, key.size(1), self.h, self.d_k).transpose(1, 2) 
+        # (batch_size, seq_len, d_k * h) -> (batch_size, seq_len, h, d_k) -> (batch_size, h, seq_len, d_k)
+        value = value.view(-1, value.size(1), self.h, self.d_k).transpose(1, 2) 
