@@ -1,0 +1,25 @@
+name: transformer-skeleton
+channels:
+  - conda-forge
+  - nvidia
+  - pytorch
+  - defaults
+dependencies:
+  - accelerate
+  - cudatoolkit
+  - jupyter
+  - python=3.11.8
+  - matplotlib
+  - numpy
+  - pandas
+  - pytorch
+  - pytorch-cuda=12.1
+  - seaborn
+  - scipy
+  - scikit-learn
+  - torchaudio
+  - torchvision
+  - transformers
+  - tqdm
+  - pip:
+    - tensorflow
