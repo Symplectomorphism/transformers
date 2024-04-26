@@ -210,10 +210,10 @@ class Transformer(nn.Module):
         src = self.src_pos(src)
         return self.encoder(self.src_pos(src), src_mask)
 
-    def decode(self, tgt, encoder_output, src_mask, tgt_mask):
+    def decode(self, encoder_output: torch.Tensor, src_mask: torch.Tensor, tgt: torch.Tensor, tgt_mask: torch.Tensor):
         tgt = self.tgt_embed(tgt)
         tgt = self.tgt_pos(tgt)
-        return self.decoder(self.tgt_pos(tgt), encoder_output, src_mask, tgt_mask)
+        return self.decoder(tgt, encoder_output, src_mask, tgt_mask)
 
     def project(self, x):
         return self.projection_layer(x)
