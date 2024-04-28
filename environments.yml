@@ -1,4 +1,4 @@
-name: transformer-skeleton
+name: transformers
 channels:
   - conda-forge
   - nvidia
