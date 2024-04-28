@@ -6,6 +6,7 @@ channels:
   - defaults
 dependencies:
   - accelerate
+  - altair
   - cudatoolkit
   - datasets
   - jupyter
