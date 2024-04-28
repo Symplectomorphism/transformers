@@ -161,4 +161,4 @@ cython_debug/
 
 # Don't upload training weights
 **/tmodel*.pt
-**/events*
+# **/events*
