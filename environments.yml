@@ -21,6 +21,7 @@ dependencies:
   - tensorboard
   - tokenizers
   - torchaudio
+  - torchmetrics
   - torchvision
   - transformers
   - tqdm
