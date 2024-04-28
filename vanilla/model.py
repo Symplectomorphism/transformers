@@ -36,7 +36,7 @@ class PositionalEncoding(nn.Module):
         self.register_buffer('pe', pe)
 
     def forward(self, x):
-        x = x + (self.pe[:, :x.size(1), :]).required_grad_(False) # (batch, seq_len, d_model)
+        x = x + (self.pe[:, :x.size(1), :]).requires_grad_(False) # (batch, seq_len, d_model)
         return self.dropout(x)
 
 class LayerNormalization(nn.Module):
@@ -94,7 +94,7 @@ class MultiHeadAttentionBlock(nn.Module):
         attention_scores = torch.matmul(query, key.transpose(-2, -1)) / math.sqrt(d_k) # transpose the last two dims.
         if mask is not None:
             # Write a very low value (indicating -inf) to the positions where mask == 0
-            attention_scores.masked_fill(mask == 0, -1e9)
+            attention_scores.masked_fill_(mask == 0, -1e9)
         attention_scores = torch.softmax(attention_scores, dim=-1) # (batch_size, h, seq_len, seq_len) # Apply softmax
         if dropout is not None:
             attention_scores = dropout(attention_scores)
@@ -141,7 +141,7 @@ class EncoderBlock(nn.Module):
         super().__init__()
         self.self_attention_block = self_attention_block
         self.feed_forward_block = feed_forward_block
-        self.residual_connections = nn.ModuleList(ResidualConnection(dropout) for _ in range(2))
+        self.residual_connections = nn.ModuleList(ResidualConnection(features, dropout) for _ in range(2))
 
     def forward(self, x, src_mask):
         x = self.residual_connections[0](x, lambda x: self.self_attention_block(x, x, x, src_mask))
@@ -153,7 +153,7 @@ class Encoder(nn.Module):
     def __init__(self, features: int, layers: nn.ModuleList) -> None:
         super().__init__()
         self.layers = layers
-        self.norm = LayerNormalization(features=features)
+        self.norm = LayerNormalization(features)
 
     def forward(self, x, mask):
         for layer in self.layers:
@@ -168,7 +168,7 @@ class DecoderBlock(nn.Module):
         self.self_attention_block = self_attention_block
         self.cross_attention_block = cross_attention_block
         self.feed_forward_block = feed_forward_block
-        self.residual_connections = nn.ModuleList(ResidualConnection(dropout) for _ in range(3))
+        self.residual_connections = nn.ModuleList(ResidualConnection(features, dropout) for _ in range(3))
 
     def forward(self, x, encoder_output, src_mask, tgt_mask):
         x = self.residual_connections[0](x, lambda x: self.self_attention_block(x, x, x, tgt_mask))
@@ -182,7 +182,7 @@ class Decoder(nn.Module):
     def __init__(self, features: int, layers: nn.ModuleList) -> None:
         super().__init__()
         self.layers = layers
-        self.norm = LayerNormalization(features=features)
+        self.norm = LayerNormalization(features)
 
     def forward(self, x, encoder_output, src_mask, tgt_mask):
         for layer in self.layers:

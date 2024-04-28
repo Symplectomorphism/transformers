@@ -126,8 +126,7 @@ def get_all_sentences(ds, lang):
         yield item['translation'][lang]
 
 def get_or_build_tokenizer(config, ds, lang):
-    # Something like: config['tokenizer_file'] = '../tokenizers/tokenizer_{0}.json'
-    tokenizer_path = Path(config['tokenizer_file'].format(lang=lang))
+    tokenizer_path = Path(config['tokenizer_file'].format(lang))
     if not Path.exists(tokenizer_path):
         # Most code taken from: https://huggingface.co/docs/tokenizers/quicktour
         tokenizer = Tokenizer(WordLevel(unk_token='[UNK]'))
@@ -217,14 +216,15 @@ def train_model(config):
 
     for epoch in range(initial_epoch, config['num_epochs']):
         torch.cuda.empty_cache()
-        model.train()
+        
         batch_iterator = tqdm(train_dataloader, desc=f'Processing epoch {epoch:02d}')
         for batch in batch_iterator:
+            model.train()
 
             encoder_input = batch['encoder_input'].to(device)   # (batch_size, seq_len)
             decoder_input = batch['decoder_input'].to(device)   # (batch_size, seq_len)
             encoder_mask = batch['encoder_mask'].to(device)     # (batch_size, 1, 1, seq_len)
-            decoder_mask = batch['decoder_mask'].to(device)     # (batch_size, 1, seq_len,seq_len)
+            decoder_mask = batch['decoder_mask'].to(device).unsqueeze(1)     # (batch_size, 1, seq_len,seq_len)
 
             # Run the tensors through the transformer
             encoder_output = model.encode(encoder_input, encoder_mask)  # (batch_size, seq_len, d_model)
@@ -250,6 +250,8 @@ def train_model(config):
             optimizer.zero_grad(set_to_none=True)
 
             global_step += 1 
+
+        run_validation(model, val_dataloader, tokenizer_src, tokenizer_tgt, config['seq_len'], device, lambda msg: batch_iterator.write(msg), global_step, writer)
 
         # Save the model at the end of every epoch
         model_filename = get_weights_file_path(config, f'{epoch:02d}')
