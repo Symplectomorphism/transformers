@@ -34,6 +34,9 @@ dependencies:
   - torchvision
   - transformers
   - tqdm
+  - networkx
+  - pyglet
+  - pymdptoolbox
   - pip:
     - atari-py
     - tensorflow
