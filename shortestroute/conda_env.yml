@@ -42,3 +42,4 @@ dependencies:
     - tensorflow
     - torch_tb_profiler
     - git+https://github.com/google/dopamine.git
+    - dopamine-rl
