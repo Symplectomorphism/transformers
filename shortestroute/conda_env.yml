@@ -1,0 +1,41 @@
+name: dec-transformer-route
+channels:
+  - conda-forge
+  - nvidia
+  - pytorch
+  - defaults
+dependencies:
+  - cudatoolkit
+  - python=3.11.8
+  - pytorch
+  - pytorch-cuda
+  - numpy
+  - psutil
+  - opencv
+  - pip
+  - pyprind
+  - gymnasium
+  - gin-config
+  - absl-py
+  - blosc
+  - accelerate
+  - altair
+  - datasets
+  - jupyter
+  - matplotlib
+  - pandas
+  - seaborn
+  - scipy
+  - scikit-learn
+  - tensorboard
+  - tokenizers
+  - torchaudio
+  - torchmetrics
+  - torchvision
+  - transformers
+  - tqdm
+  - pip:
+    - atari-py
+    - tensorflow
+    - torch_tb_profiler
+    - git+https://github.com/google/dopamine.git

@@ -1,0 +1,31 @@
+name: dec-transformer-route
+channels:
+  - conda-forge
+  - nvidia
+  - pytorch
+  - defaults
+dependencies:
+  - accelerate
+  - altair
+  - cudatoolkit
+  - datasets
+  - jupyter
+  - python=3.11.8
+  - matplotlib
+  - numpy
+  - pandas
+  - pytorch
+  - pytorch-cuda=12.1
+  - seaborn
+  - scipy
+  - scikit-learn
+  - tensorboard
+  - tokenizers
+  - torchaudio
+  - torchmetrics
+  - torchvision
+  - transformers
+  - tqdm
+  - pip:
+    - tensorflow
+    - torch_tb_profiler
