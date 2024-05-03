@@ -36,9 +36,9 @@ dependencies:
   - tqdm
   - networkx
   - pyglet
-  - pymdptoolbox
   - pip:
     - atari-py
+    - pymdptoolbox
     - tensorflow
     - torch_tb_profiler
     - git+https://github.com/google/dopamine.git
