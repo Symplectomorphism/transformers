@@ -8,7 +8,7 @@ import pyglet
 
 from routegym.graph import Graph
 
-REWARD_INVALID = -1000
+REWARD_INVALID = -1
 
 WINDOW_W = WINDOW_H = 1000
 
@@ -30,7 +30,7 @@ class ShortestRouteEnv(gym.Env):
         reward, done = self.graph.transition(action)
         if str(reward) == "False":  # action was invalid. Python is dumb and testing for "not reward" catches 0...
             reward = self.max_r * REWARD_INVALID
-            print("INVALID!")
+            # print("INVALID!")
 
         return self.graph.position, reward, done, {}
 

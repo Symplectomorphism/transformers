@@ -247,12 +247,13 @@ class Graph:
         self.path_bigram = make_bigram(self.path)
 
         if new_pos not in self.adjacent_indices[self.position]:
-            print(f"{new_pos} not in {self.adjacent_indices[self.position]}")
-            import time
-            time.sleep(100)
+            # print(f"{new_pos} not in {self.adjacent_indices[self.position]}")
+            # import time
+            # time.sleep(100)
             return False, False
 
-        reward = self.adj_mat[self.position, new_pos]
+        # reward = self.adj_mat[self.position, new_pos]
+        reward = 0 if new_pos == self.goal else -1
         self._set_position(new_pos)
 
         done = self.position == self.goal
