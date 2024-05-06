@@ -213,23 +213,23 @@ class Graph:
         self.path = [origin]
         self.path_bigram = []
 
-        self.dijkstra_path = nx.dijkstra_path(self.ngraph, origin, goal)
-        self.dijkstra_bigram = make_bigram(self.dijkstra_path)
-        self.dijkstra_rew = sum([self.adj_mat[(e1, e2)] for e1, e2 in self.dijkstra_bigram])
+        # self.dijkstra_path = nx.dijkstra_path(self.ngraph, origin, goal)
+        # self.dijkstra_bigram = make_bigram(self.dijkstra_path)
+        # self.dijkstra_rew = sum([self.adj_mat[(e1, e2)] for e1, e2 in self.dijkstra_bigram])
 
-        all_simple_paths = list(nx.all_simple_paths(self.ngraph, origin, goal))
-        ws = []
-        for path in all_simple_paths:
-            big = make_bigram(path)
-            weight = 0
-            for e1, e2 in big:
-                weight += self.adj_mat[e1,e2]
-            ws.append(weight)
-        i = np.argmax(np.array(ws))
+        # all_simple_paths = list(nx.all_simple_paths(self.ngraph, origin, goal))
+        # ws = []
+        # for path in all_simple_paths:
+        #     big = make_bigram(path)
+        #     weight = 0
+        #     for e1, e2 in big:
+        #         weight += self.adj_mat[e1,e2]
+        #     ws.append(weight)
+        # i = np.argmax(np.array(ws))
 
-        self.longest_path_rew = ws[i]
-        self.longest_path = all_simple_paths[i]
-        self.longest_path_bigram = make_bigram(self.longest_path)
+        # self.longest_path_rew = ws[i]
+        # self.longest_path = all_simple_paths[i]
+        # self.longest_path_bigram = make_bigram(self.longest_path)
 
 
     def reset(self, origin=None, goal=None):
