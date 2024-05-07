@@ -6,7 +6,7 @@ I'm working on various transformer architectures here.
 2. GPT implemented based on [Andrej Karpathy's lecture](https://youtu.be/kCc8FmEb1nY?si=ZnAfFHPO1ly3Ie0t), [sample code](https://github.com/karpathy/ng-video-lecture).
 
 ## In Progress
-1. Decision transformer on the shortest route problem: [paper](https://arxiv.org/pdf/2106.01345).
+1. Decision transformer on the shortest route problem: [paper](https://arxiv.org/pdf/2106.01345), [sample code](https://github.com/kzl/decision-transformer).
 
 ## To be done
 1. Transformer with [MoE Layer](https://arxiv.org/pdf/1701.06538), [sample code](https://github.com/YeonwooSung/Pytorch_mixture-of-experts?tab=readme-ov-file).
