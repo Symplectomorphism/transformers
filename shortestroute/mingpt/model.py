@@ -285,7 +285,6 @@ class GPT(nn.Module):
             a_embedding = self.ae(actions.type(torch.long).squeeze(-1))
 
             tok_emb = torch.zeros((states.shape[0], states.shape[1]*3 - int(targets is None), self.config.n_embd), dtype=torch.float32, device=s_embedding.device)
-            print(r_embedding.shape)
             tok_emb[:, ::3, :] = r_embedding
             tok_emb[:, 1::3, :] = s_embedding
             tok_emb[:, 2::3, :] = a_embedding[:, -states.shape[1] + int(targets is None):, :]
@@ -307,6 +306,7 @@ class GPT(nn.Module):
             1,
             torch.repeat_interleave(timesteps, self.config.n_embd, dim=-1) 
         ) + self.pe[:, :tok_emb.shape[1], :]
+        print(pos_emb)
 
         # forward the GPT model
         x = self.drop(tok_emb + pos_emb)
