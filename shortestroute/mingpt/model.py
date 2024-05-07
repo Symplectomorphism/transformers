@@ -255,6 +255,10 @@ class GPT(nn.Module):
                     # weights of blacklist modules will *not* be weight decayed
                     no_decay.add(fpn)
 
+        # special case: the position embedding parameter in the root GPT module is not decayed
+        no_decay.add('pe')
+        no_decay.add('gpe')
+
         # validate that we considered every parameter
         param_dict = {pn: p for pn, p in self.named_parameters()}
         inter_params = decay & no_decay
@@ -264,10 +268,10 @@ class GPT(nn.Module):
                                                     % (str(param_dict.keys() - union_params), )
             
         # create the pytorch optimizer object
-        optim_groups = {
+        optim_groups = [
             {"params": [param_dict[pn] for pn in sorted(list(decay))], "weight_decay": train_config.weight_decay},
             {"params": [param_dict[pn] for pn in sorted(list(no_decay))], "weight_decay": 0.0},
-        }
+        ]
         optimizer = torch.optim.AdamW(optim_groups, lr=train_config.learning_rate, betas=train_config.betas)
         return optimizer
 
@@ -327,7 +331,6 @@ class GPT(nn.Module):
 
         # if we are given some desired targets also calculate the loss
         loss = None
-        loss2 = None
         if targets is not None:
             loss = F.cross_entropy(logits.view(-1, logits.size(-1)), targets.view(-1), ignore_index=-1)
 
