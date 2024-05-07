@@ -306,7 +306,11 @@ class GPT(nn.Module):
             1,
             torch.repeat_interleave(timesteps, self.config.n_embd, dim=-1) 
         ) + self.pe[:, :tok_emb.shape[1], :]
-        print(pos_emb)
+        tmp = torch.gather(
+            all_global_pos_emb,
+            1,
+            torch.repeat_interleave(timesteps, self.config.n_embd, dim=-1) 
+        )
 
         # forward the GPT model
         x = self.drop(tok_emb + pos_emb)
@@ -323,7 +327,9 @@ class GPT(nn.Module):
 
         # if we are given some desired targets also calculate the loss
         loss = None
+        loss2 = None
         if targets is not None:
             loss = F.cross_entropy(logits.view(-1, logits.size(-1)), targets.view(-1), ignore_index=-1)
+
 
         return logits, loss
