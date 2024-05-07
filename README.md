@@ -2,11 +2,11 @@
 I'm working on various transformer architectures here.
 
 ## Done
-1. Vanilla transformer implemented (based on Umar Jamil's lecture).
-2. GPT implemented (based on Karpathy's lecture).
+1. Vanilla transformer implemented based on [Umar Jamil's lecture](https://youtu.be/ISNdQcPhsts?si=kd00dN1GiQRQgQoj), [sample code](https://github.com/hkproj/pytorch-transformer).
+2. GPT implemented based on [Andrej Karpathy's lecture](https://youtu.be/kCc8FmEb1nY?si=ZnAfFHPO1ly3Ie0t), [sample code](https://github.com/karpathy/ng-video-lecture).
 
 ## In Progress
-1. Decision transformer on the shortest route problem.
+1. Decision transformer on the shortest route problem: [paper](https://arxiv.org/pdf/2106.01345).
 
 ## To be done
 1. Transformer with [MoE Layer](https://arxiv.org/pdf/1701.06538), [sample code](https://github.com/YeonwooSung/Pytorch_mixture-of-experts?tab=readme-ov-file).
