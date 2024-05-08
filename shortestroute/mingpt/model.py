@@ -18,7 +18,7 @@ from torch.nn import functional as F
 
 logger = logging.getLogger(__name__)
 
-from mingpt.utils import CfgNode as CN
+from mingpt.utils import top_k_logits, CfgNode as CN
 
 # -----------------------------------------------------------------------------
 
@@ -336,3 +336,37 @@ class GPT(nn.Module):
 
 
         return logits, loss
+
+    @torch.no_grad()
+    def generate(self, x, steps, temperature=1.0, do_sample=False, tok_k=None, actions=None, rtgs=None, timesteps=None):
+        """
+        Take a conditioning sequence of indices in x (of shape (b,t)) and predict the next token in
+        the sequence `steps` times, feeding the predictions back into the model each time. Clearly, 
+        the sampling has quadratic complexity unlike an RNN that is only linear, and has a finite 
+        context window of block_size, unlike an RNN that has an infinite context window.
+        """
+        block_size = self.get_block_size()
+        self.eval()
+        for k in range(steps):
+            x_cond = x if x.size(1) <= block_size//3 else x[:, -block_size//3:]  # crop context if needed
+            if actions is not None:
+                actions = actions if actions.size(1) <= block_size//3 else actions[:, -block_size//3:] # crop context if needed
+            rtgs = rtgs if rtgs.size(1) <= block_size//3 else rtgs[:, -block_size//3:] # crop context if needed
+            logits, _ = self(x_cond, actions=actions, rtgs=rtgs, timesteps=timesteps)
+            # pluck the logits at the final step and scale by temperature
+            logits = logits[:, -1, :] / temperature
+            # optionally crop probabilities to only the top k options
+            if tok_k is not None:
+                logits = top_k_logits(logits, tok_k)
+            # apply softmax to convert to probabilities
+            probs = F.softmax(logits, dim=-1)
+            # sample from the distribution or take the most likely
+            if do_sample:
+                ix = torch.multinomial(probs, num_samples=1)
+            else:
+                _, ix = torch.topk(probs, k=1, dim=-1)
+            # append to the sequence and continue
+            # x = torch.cat((x, ix), dim=1)
+            x = ix
+
+        return x

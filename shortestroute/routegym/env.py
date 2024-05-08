@@ -160,14 +160,14 @@ class ShortestRouteEnv(gym.Env):
         colors[list(self.graph.ngraph.nodes).index(self.graph.origin)] = "pink"
         colors[list(self.graph.ngraph.nodes).index(self.graph.position)] = "red"
 
-        optimal_path = self.graph.dijkstra_bigram
+        # optimal_path = self.graph.dijkstra_bigram
 
         edge_colors = []
         for edge in self.graph.ngraph.edges:
             if edge in self.graph.path_bigram:
                 edge_colors.append("pink")
-            elif edge in optimal_path:
-                edge_colors.append("blue")
+        #     elif edge in optimal_path:
+        #         edge_colors.append("blue")
             else:
                 edge_colors.append("black")
 
