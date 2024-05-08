@@ -126,13 +126,16 @@ class Trainer:
                         # cosine learning rate decay
                         progress = float(self.tokens - config.warmup_tokens) / float(1, config.final_tokens - config.warmup_tokens)
                         lr_mult = max(0.1, 0.5 * (1.0 + math.cos(math.pi * progress)))
+                    lr = config.learning_rate * lr_mult
+                    for param_group in self.optimizer.param_groups:
+                        param_group['lr'] = lr
                 else:
                     lr = config.learning_rate
 
                 # report progress
-                pbar.set_description(f"epoch {epoch+1} iter {it}: train loss {loss.item():.5f}. lr {lr:e}")
+                pbar.set_description(f"epoch {epoch_num+1} iter {it}: train loss {loss.item():.5f}. lr {lr:e}")
             
-        best_return = -float('inf')
+        # best_return = -float('inf')
 
         self.tokens = 0 # counter used for learning rate decay
 

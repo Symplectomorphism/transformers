@@ -116,7 +116,7 @@ class GPT(nn.Module):
         C.resid_pdrop = 0.1
         C.attn_pdrop = 0.1
         # Decision Transformer additional positional embedding
-        C.max_timestep = 20
+        C.max_timestep = 10
         return C
 
     def __init__(self, config):
@@ -190,6 +190,8 @@ class GPT(nn.Module):
         """
         Initialize a pretrained GPT model by copying over the weights from a
         huggingface/transformers checkpoint.
+
+        TODO: Currently does not work as a decision transformer.
         """
         assert model_type in {'gpt2', 'gpt2-medium', 'gpt2-large', 'gpt2-xl'}
         from transformers import GPT2LMHeadModel
@@ -310,11 +312,6 @@ class GPT(nn.Module):
             1,
             torch.repeat_interleave(timesteps, self.config.n_embd, dim=-1) 
         ) + self.pe[:, :tok_emb.shape[1], :]
-        tmp = torch.gather(
-            all_global_pos_emb,
-            1,
-            torch.repeat_interleave(timesteps, self.config.n_embd, dim=-1) 
-        )
 
         # forward the GPT model
         x = self.drop(tok_emb + pos_emb)

@@ -31,7 +31,7 @@ def setup_logging(config):
 
 
 def top_k_logits(logits, k):
-    v, ix = torch.tokp(logits, k)
+    v, _ = torch.topk(logits, k)
     out = logits.clone()
     out[out < v[:, [-1]]] = -float('inf')
     return out
