@@ -349,7 +349,7 @@ class GPT(nn.Module):
             if actions is not None:
                 actions = actions if actions.size(1) <= block_size//3 else actions[:, -block_size//3:] # crop context if needed
             rtgs = rtgs if rtgs.size(1) <= block_size//3 else rtgs[:, -block_size//3:] # crop context if needed
-            logits, _ = self(x_cond, actions=actions, rtgs=rtgs, timesteps=timesteps)
+            logits, _ = self(x_cond, actions=actions, targets=None, rtgs=rtgs, timesteps=timesteps)
             # pluck the logits at the final step and scale by temperature
             logits = logits[:, -1, :] / temperature
             # optionally crop probabilities to only the top k options

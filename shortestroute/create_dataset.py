@@ -1,6 +1,17 @@
 import numpy as np
+import scipy as sp
+from env.shortestpath import ShortestPathEnv
+import networkx as nx
 
-def create_dataset(num_steps):
+def create_dataset(num_steps, node_num=12):
+
+    A = sp.sparse.random(node_num, node_num, density=0.5, format='csr')
+    A.data[:] = 1
+    A = A.todense()
+    A = np.ma.array(A, mask=np.eye(node_num)).filled(fill_value=0).astype(int)
+    # print("sparsity = %.2f" % (1 - np.sum(A)/A.size))
+    env = ShortestPathEnv(nx.from_numpy_array(A, create_using=nx.DiGraph), 0, 5)
+
     obss = []
     actions = []
     returns = [0]
@@ -9,7 +20,6 @@ def create_dataset(num_steps):
 
     # simulate to create trajectories
     while len(obss) < num_steps:
-        done = False
         for _ in range(10):
             ac = np.random.choice(np.arange(0, env.adj_mat.shape[0]))
             state, ret, terminal = env.step(ac)
@@ -19,9 +29,8 @@ def create_dataset(num_steps):
             if terminal:
                 done_idxs += [len(obss)]
                 returns += [0]
-            returns[-1] += ret
-            env.reset()
-            break
+                env.reset()
+                break
 
     actions = np.array(actions)
     returns = np.array(returns)
@@ -49,4 +58,4 @@ def create_dataset(num_steps):
         start_index = i+1
     print('max timestep is %d' % max(timesteps))
 
-    return obss, actions, returns, done_idxs, rtg, timesteps
+    return obss, actions, returns, done_idxs, rtg, timesteps, env

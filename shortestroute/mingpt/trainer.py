@@ -124,7 +124,7 @@ class Trainer:
                         lr_mult = float(self.tokens) / float(max(1, config.warmup_tokens))
                     else:
                         # cosine learning rate decay
-                        progress = float(self.tokens - config.warmup_tokens) / float(1, config.final_tokens - config.warmup_tokens)
+                        progress = float(self.tokens - config.warmup_tokens) / float(max(1, config.final_tokens - config.warmup_tokens))
                         lr_mult = max(0.1, 0.5 * (1.0 + math.cos(math.pi * progress)))
                     lr = config.learning_rate * lr_mult
                     for param_group in self.optimizer.param_groups:

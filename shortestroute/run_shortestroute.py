@@ -1,3 +1,4 @@
+import numpy as np
 import torch
 import torch.nn as nn
 from torch.nn import functional as F
@@ -46,36 +47,36 @@ class StateActionReturnDataset(Dataset):
 
         return states, actions, rtgs, timesteps
 
-obss, actions, returns, done_idxs, rtgs, timesteps = create_dataset(10*1000)
-
-train_dataset = StateActionReturnDataset(obss, 10 * 3, actions, done_idxs, rtgs, timesteps)
-
-# Set up configs
-C = CN()
-
-## system
-C.system = CN()
-C.system.seed = 3407
-C.system.work_dir = './out/decgpt'
-
-# data
-C.data = StateActionReturnDataset.get_default_config()
-
-# model
-C.model = GPT.get_default_config()
-C.model.model_type = 'gpt-mini'
-C.model.vocab_size = train_dataset.vocab_size
-C.model.block_size = train_dataset.block_size
-C.model.max_timestep = max(timesteps)
-
-# trainer
-C.trainer = Trainer.get_default_config()
-C.trainer.learning_rate = 5e-4
-C.trainer.max_epochs = 50
-C.trainer.num_workers = 4
-
-model = GPT(C.model)
-
-# initialize a trainer instance and kick off training
-trainer = Trainer(model, train_dataset, C.trainer)
-trainer.run()
+# obss, actions, returns, done_idxs, rtgs, timesteps = create_dataset(10*1000)
+# 
+# train_dataset = StateActionReturnDataset(obss, 10 * 3, actions, done_idxs, rtgs, timesteps)
+# 
+# # Set up configs
+# C = CN()
+# 
+# ## system
+# C.system = CN()
+# C.system.seed = 3407
+# C.system.work_dir = './out/decgpt'
+# 
+# # data
+# C.data = StateActionReturnDataset.get_default_config()
+# 
+# # model
+# C.model = GPT.get_default_config()
+# C.model.model_type = 'gpt-mini'
+# C.model.vocab_size = train_dataset.vocab_size
+# C.model.block_size = train_dataset.block_size
+# C.model.max_timestep = max(timesteps)
+# 
+# # trainer
+# C.trainer = Trainer.get_default_config()
+# C.trainer.learning_rate = 5e-4
+# C.trainer.max_epochs = 50
+# C.trainer.num_workers = 4
+# 
+# model = GPT(C.model)
+# 
+# # initialize a trainer instance and kick off training
+# trainer = Trainer(model, train_dataset, C.trainer)
+# trainer.run()
