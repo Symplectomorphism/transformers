@@ -4,9 +4,10 @@ I'm working on various transformer architectures here.
 ## Done
 1. Vanilla transformer implemented based on [Umar Jamil's lecture](https://youtu.be/ISNdQcPhsts?si=kd00dN1GiQRQgQoj), [sample code](https://github.com/hkproj/pytorch-transformer).
 2. GPT implemented based on [Andrej Karpathy's lecture](https://youtu.be/kCc8FmEb1nY?si=ZnAfFHPO1ly3Ie0t), [sample code](https://github.com/karpathy/ng-video-lecture).
+3. Decision transformer on the shortest route problem: [paper](https://arxiv.org/pdf/2106.01345), [sample code](https://github.com/kzl/decision-transformer).
 
 ## In Progress
-1. Decision transformer on the shortest route problem: [paper](https://arxiv.org/pdf/2106.01345), [sample code](https://github.com/kzl/decision-transformer).
+1. MoE Layer: [sample code](https://github.com/YeonwooSung/Pytorch_mixture-of-experts)
 
 ## To be done
 1. Vision Transformer

@@ -149,9 +149,9 @@ class GPT(nn.Module):
                 'gpt-nano':    dict(n_layer=3, n_head=3, n_embd=48),
             }[config.model_type])
 
-        self.se = nn.Linear(1, config.n_embd)   # state embedding
-        self.re = nn.Linear(1, config.n_embd)   # returns-to-go embedding
-        self.ae = nn.Embedding(config.vocab_size, config.n_embd)   # action embedding
+        self.se = nn.Sequential(nn.Linear(1, config.n_embd), nn.Tanh())   # state embedding
+        self.re = nn.Sequential(nn.Linear(1, config.n_embd), nn.Tanh())   # returns-to-go embedding
+        self.ae = nn.Sequential(nn.Embedding(config.vocab_size, config.n_embd), nn.Tanh())   # action embedding
         self.drop = nn.Dropout(config.embd_pdrop)
         self.blocks = nn.Sequential(*[Block(config) for _ in range(config.n_layer)])
         self.ln_f = nn.LayerNorm(config.n_embd)
