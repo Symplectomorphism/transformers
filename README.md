@@ -8,7 +8,7 @@ I'm working on various transformer architectures here.
 4. MoE Layer: [sample code](https://github.com/YeonwooSung/Pytorch_mixture-of-experts)
 
 ## In Progress
-1. Vision Transformer
+1. Vision Transformer: [paper](https://arxiv.org/pdf/2010.11929), [sample code](https://github.com/google-research/vision_transformer)
 
 ## To be done
 1. Transformer with [MoE Layer](https://arxiv.org/pdf/1701.06538), [sample code](https://github.com/YeonwooSung/Pytorch_mixture-of-experts?tab=readme-ov-file).  
