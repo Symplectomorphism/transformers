@@ -55,7 +55,7 @@ class SparseDispatcher(object):
         self._gates = gates
         self._num_experts = num_experts
         # sort experts
-        sorted_experts, index_sorted_experts = torch.nonzero(gates).sort(0)
+        sorted_experts, index_sorted_experts = torch.nonzero(gates).sort(dim=0)
         # drop indices
         _, self._expert_index = sorted_experts.split(1, dim=1)
         # get according to batch index for each expert
